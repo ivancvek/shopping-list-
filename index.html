@@ -2,15 +2,8 @@
 <html lang="sl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#10b981">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Nakupovalni Listek">
-    <title>Nakupovalni Listek</title>
-    <link rel="manifest" href="shopping-manifest.json">
-    <link rel="icon" type="image/png" href="shopping-icon-192.png">
-    <link rel="apple-touch-icon" href="shopping-icon-192.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛒 Nakupovalni Listek v2</title>
     <style>
         * {
             margin: 0;
@@ -22,13 +15,12 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             min-height: 100vh;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            padding: 20px;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
         }
 
         .header {
@@ -40,12 +32,9 @@
         }
 
         h1 {
-            color: #059669;
+            color: #10b981;
             font-size: 28px;
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .subtitle {
@@ -53,142 +42,381 @@
             font-size: 14px;
         }
 
-        .add-item-box {
+        .history-badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .total-box {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+        }
+
+        .total-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .total-amount {
+            font-size: 36px;
+            font-weight: 800;
+        }
+
+        .stats {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-top: 3px;
+        }
+
+        .input-section {
             background: white;
             border-radius: 15px;
             padding: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
 
-        .input-wrapper {
+        .input-row {
             display: flex;
             gap: 10px;
+            margin-bottom: 10px;
         }
 
-        #itemInput {
+        .input-wrapper {
             flex: 1;
-            padding: 16px;
+        }
+
+        .input-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .item-input {
+            width: 100%;
+            padding: 14px;
             border: 2px solid #e5e7eb;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 16px;
             background: #f9fafb;
             transition: all 0.3s;
         }
 
-        #itemInput:focus {
+        .price-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #f9fafb;
+            text-align: right;
+        }
+
+        .item-input:focus, .price-input:focus {
             outline: none;
             border-color: #10b981;
             background: white;
         }
 
-        .btn {
-            padding: 16px 24px;
+        .add-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
-        .btn-add {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-        }
-
-        .btn-add:active {
+        .add-btn:active {
             transform: scale(0.98);
         }
 
-        .btn-share {
-            background: #3b82f6;
-            color: white;
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        .btn-clear {
-            background: #ef4444;
-            color: white;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .list-container {
+        .quick-add {
             background: white;
             border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
-        }
-
-        .list-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #059669;
+            padding: 15px;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
-        .item-count {
+        .quick-add-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .quick-add-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .toggle-icon {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .toggle-icon.open {
+            transform: rotate(180deg);
+        }
+
+        .quick-list {
+            display: none;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .quick-list.open {
+            display: block;
+        }
+
+        .quick-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-item:last-child {
+            border-bottom: none;
+        }
+
+        .quick-item:hover {
+            background: #f9fafb;
+        }
+
+        .quick-item:active {
             background: #10b981;
             color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
+        }
+
+        .quick-item-name {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .quick-item-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .quick-item:active .quick-item-price {
+            color: white;
+        }
+
+        .search-box {
+            margin-bottom: 10px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
             font-size: 14px;
         }
 
-        .shopping-item {
+        .search-input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+
+        .items-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .clear-bought-btn {
+            padding: 8px 16px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .share-btn {
+            padding: 8px 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 16px;
-            margin-bottom: 10px;
-            border-radius: 12px;
-            background: #f0fdf4;
-            border-left: 4px solid #10b981;
+            padding: 14px;
+            background: #f9fafb;
+            border-radius: 10px;
+            margin-bottom: 8px;
             transition: all 0.3s;
         }
 
-        .shopping-item.checked {
+        .item.checked {
+            opacity: 0.6;
             background: #f3f4f6;
-            border-left-color: #9ca3af;
-            opacity: 0.7;
+        }
+
+        .item.checked .item-text {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+
+        .item.editing {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
         }
 
         .checkbox {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
             flex-shrink: 0;
         }
 
-        .item-text {
+        .item-content {
             flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .item-text {
             font-size: 16px;
             color: #1f2937;
             font-weight: 500;
-            word-break: break-word;
         }
 
-        .item-text.checked {
-            text-decoration: line-through;
+        .item-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #10b981;
+            cursor: pointer;
+        }
+
+        .item.checked .item-price {
             color: #9ca3af;
+        }
+
+        .price-edit-input {
+            width: 80px;
+            padding: 6px;
+            border: 2px solid #10b981;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: right;
+            background: white;
+        }
+
+        .price-edit-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        }
+
+        .edit-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .save-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            flex-shrink: 0;
         }
 
         .delete-btn {
             background: #ef4444;
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 14px;
             flex-shrink: 0;
         }
 
@@ -198,88 +426,9 @@
             color: #9ca3af;
         }
 
-        .empty-state svg {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 15px;
-            opacity: 0.3;
-        }
-
-        .stats {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            flex: 1;
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: #10b981;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #6b7280;
-            margin-top: 4px;
-        }
-
-        .install-prompt {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            padding: 18px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            display: none;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .install-prompt.show {
-            display: flex;
-        }
-
-        .install-btn {
-            background: white;
-            color: #2563eb;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .quick-add {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .quick-btn {
-            background: #dbeafe;
-            border: none;
-            padding: 10px 8px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #1e40af;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .quick-btn:active {
-            transform: scale(0.95);
-            background: #bfdbfe;
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -287,244 +436,397 @@
     <div class="container">
         <div class="header">
             <h1>🛒 Nakupovalni Listek</h1>
-            <p class="subtitle">Tvoj digitalni seznam za nakupovanje</p>
+            <p class="subtitle">
+                Z cenami in skupnim seštevkom
+                <span class="history-badge" id="historyBadge">💾 0 v zgodovini</span>
+            </p>
         </div>
 
-        <div class="install-prompt" id="installPrompt">
-            <div style="flex: 1;">
-                📱 Namesti aplikacijo za hitrejši dostop!
-            </div>
-            <button class="install-btn" id="installBtn">Namesti</button>
-        </div>
-
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number" id="totalCount">0</div>
-                <div class="stat-label">Skupaj</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="uncheckedCount">0</div>
-                <div class="stat-label">Za kupit</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="checkedCount">0</div>
-                <div class="stat-label">Kupljeno</div>
+        <div class="total-box">
+            <div class="total-label">💰 SKUPAJ CENA</div>
+            <div class="total-amount" id="totalPrice">0.00 €</div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalItems">0</div>
+                    <div class="stat-label">Skupaj</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="toBuyItems">0</div>
+                    <div class="stat-label">Za kupit</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="boughtItems">0</div>
+                    <div class="stat-label">Kupljeno</div>
+                </div>
             </div>
         </div>
 
-        <div class="add-item-box">
-            <div class="input-wrapper">
-                <input 
-                    type="text" 
-                    id="itemInput" 
-                    placeholder="Dodaj artikel... (npr. kruh, mleko)"
-                    onkeypress="if(event.key==='Enter') addItem()"
-                >
-                <button class="btn btn-add" onclick="addItem()">➕</button>
+        <div class="input-section">
+            <div class="input-row">
+                <div class="input-wrapper" style="flex: 2;">
+                    <div class="input-label">Artikel</div>
+                    <input 
+                        type="text" 
+                        class="item-input" 
+                        id="itemInput" 
+                        placeholder="Npr. Kruh"
+                        onkeypress="if(event.key==='Enter') addItem()"
+                    >
+                </div>
+                <div class="input-wrapper" style="flex: 1;">
+                    <div class="input-label">Cena (€)</div>
+                    <input 
+                        type="number" 
+                        step="0.01"
+                        class="price-input" 
+                        id="priceInput" 
+                        placeholder="0.00"
+                        onkeypress="if(event.key==='Enter') addItem()"
+                    >
+                </div>
             </div>
-
-            <div class="quick-add">
-                <button class="quick-btn" onclick="quickAdd('🍞 Kruh')">🍞 Kruh</button>
-                <button class="quick-btn" onclick="quickAdd('🥛 Mleko')">🥛 Mleko</button>
-                <button class="quick-btn" onclick="quickAdd('🧀 Sir')">🧀 Sir</button>
-                <button class="quick-btn" onclick="quickAdd('🥚 Jajca')">🥚 Jajca</button>
-                <button class="quick-btn" onclick="quickAdd('🍎 Sadje')">🍎 Sadje</button>
-                <button class="quick-btn" onclick="quickAdd('🥬 Zelenjava')">🥬 Zelenjava</button>
-            </div>
-
-            <button class="btn btn-share" onclick="shareList()">📤 Deli Seznam</button>
-            <button class="btn btn-clear" onclick="clearChecked()">🗑️ Pobriši kupljeno</button>
+            <button class="add-btn" onclick="addItem()">➕ Dodaj</button>
         </div>
 
-        <div class="list-container">
-            <div class="list-title">
-                <span>📝 Moj Seznam</span>
-                <span class="item-count" id="listCount">0</span>
+        <div class="quick-add">
+            <div class="quick-add-header" onclick="toggleQuickList()">
+                <span class="quick-add-title">⚡ Hitro dodaj (50 artiklov)</span>
+                <span class="toggle-icon" id="toggleIcon">▼</span>
             </div>
-            <div id="shoppingList"></div>
+            <div class="quick-list" id="quickList">
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        id="quickSearch" 
+                        placeholder="🔍 Išči artikel..."
+                        oninput="filterQuickList()"
+                    >
+                </div>
+                <div id="quickItemsList"></div>
+            </div>
+        </div>
+
+        <div class="items-section">
+            <div class="section-header">
+                <span class="section-title">📝 Moj seznam</span>
+                <div class="action-buttons">
+                    <button class="share-btn" onclick="shareList()">📤 Deli</button>
+                    <button class="clear-bought-btn" onclick="clearBought()">🗑️ Pobriši kupljeno</button>
+                </div>
+            </div>
+            <div id="itemsList"></div>
         </div>
     </div>
 
     <script>
-        let items = JSON.parse(localStorage.getItem('shoppingList') || '[]');
-        let deferredPrompt;
+        let items = [];
+        let priceHistory = JSON.parse(localStorage.getItem('priceHistory') || '{}');
 
-        // PWA Install
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('installPrompt').classList.add('show');
-        });
+        // 50 predefined items with prices
+        const predefinedItems = [
+            { name: '🍞 Kruh', price: 1.50 },
+            { name: '🥛 Mleko', price: 0.99 },
+            { name: '🧀 Sir', price: 3.50 },
+            { name: '🥚 Jajca', price: 2.20 },
+            { name: '🍎 Jabolko', price: 0.60 },
+            { name: '🍌 Banana', price: 0.40 },
+            { name: '🍊 Pomaranča', price: 0.50 },
+            { name: '🥬 Solata', price: 1.80 },
+            { name: '🥕 Korenje', price: 0.80 },
+            { name: '🧅 Čebula', price: 0.70 },
+            { name: '🥔 Krompir', price: 1.20 },
+            { name: '🍅 Paradižnik', price: 1.50 },
+            { name: '🥒 Kumara', price: 0.90 },
+            { name: '🌶️ Paprika', price: 1.30 },
+            { name: '🥦 Brokoli', price: 2.10 },
+            { name: '🍗 Piščanec', price: 5.50 },
+            { name: '🥩 Govedina', price: 8.90 },
+            { name: '🥓 Slanina', price: 4.20 },
+            { name: '🍖 Svinjina', price: 6.50 },
+            { name: '🐟 Riba', price: 7.80 },
+            { name: '🍤 Kozice', price: 9.50 },
+            { name: '🧈 Maslo', price: 2.80 },
+            { name: '🥐 Croissant', price: 1.20 },
+            { name: '🍪 Piškoti', price: 2.50 },
+            { name: '🍫 Čokolada', price: 1.80 },
+            { name: '🍰 Torta', price: 12.00 },
+            { name: '🍕 Pizza', price: 5.50 },
+            { name: '🍝 Testenine', price: 1.90 },
+            { name: '🍚 Riž', price: 2.30 },
+            { name: '🥫 Konzerva', price: 1.50 },
+            { name: '🍯 Med', price: 4.50 },
+            { name: '🥜 Oreščki', price: 3.20 },
+            { name: '☕ Kava', price: 5.80 },
+            { name: '🍵 Čaj', price: 3.50 },
+            { name: '🧃 Sok', price: 1.80 },
+            { name: '🥤 Coca Cola', price: 1.50 },
+            { name: '🍺 Pivo', price: 1.20 },
+            { name: '🍷 Vino', price: 6.50 },
+            { name: '💧 Voda', price: 0.50 },
+            { name: '🧻 WC papir', price: 3.50 },
+            { name: '🧼 Milo', price: 1.80 },
+            { name: '🧴 Šampon', price: 4.20 },
+            { name: '🪥 Zobna pasta', price: 2.90 },
+            { name: '🧽 Goba', price: 1.20 },
+            { name: '🧹 Metla', price: 5.50 },
+            { name: '🧺 Pralni prašek', price: 8.90 },
+            { name: '🕯️ Svečke', price: 3.20 },
+            { name: '💡 Žarnica', price: 4.50 },
+            { name: '🔋 Baterije', price: 5.20 },
+            { name: '📰 Časopis', price: 1.50 }
+        ];
 
-        document.getElementById('installBtn').addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-                document.getElementById('installPrompt').classList.remove('show');
-            }
-        });
-
-        // Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('shopping-sw.js')
-                .then(reg => console.log('Service Worker registered'))
-                .catch(err => console.log('Service Worker failed'));
-        }
-
-        // Add item
-        function addItem() {
-            const input = document.getElementById('itemInput');
-            const text = input.value.trim();
+        function toggleQuickList() {
+            const list = document.getElementById('quickList');
+            const icon = document.getElementById('toggleIcon');
             
-            if (text) {
-                items.push({
-                    id: Date.now(),
-                    text: text,
-                    checked: false,
-                    timestamp: new Date().toISOString()
-                });
-                
-                saveItems();
-                input.value = '';
-                renderList();
-            }
+            list.classList.toggle('open');
+            icon.classList.toggle('open');
         }
 
-        // Quick add
-        function quickAdd(text) {
+        function renderQuickList(filteredItems = predefinedItems) {
+            const container = document.getElementById('quickItemsList');
+            
+            container.innerHTML = filteredItems.map(item => `
+                <div class="quick-item" onclick="quickAdd('${item.name}', ${item.price})">
+                    <span class="quick-item-name">${item.name}</span>
+                    <span class="quick-item-price">${item.price.toFixed(2)}€</span>
+                </div>
+            `).join('');
+        }
+
+        function filterQuickList() {
+            const search = document.getElementById('quickSearch').value.toLowerCase();
+            const filtered = predefinedItems.filter(item => 
+                item.name.toLowerCase().includes(search)
+            );
+            renderQuickList(filtered);
+        }
+
+        // Auto-suggest price when typing item name
+        document.addEventListener('DOMContentLoaded', function() {
+            const itemInput = document.getElementById('itemInput');
+            const priceInput = document.getElementById('priceInput');
+            
+            itemInput.addEventListener('input', function() {
+                const text = this.value.trim().toLowerCase();
+                
+                // Search for matching item in history
+                for (let [itemName, itemPrice] of Object.entries(priceHistory)) {
+                    if (itemName.toLowerCase().includes(text) && text.length > 2) {
+                        priceInput.value = itemPrice;
+                        priceInput.style.borderColor = '#10b981';
+                        priceInput.style.background = '#f0fdf4';
+                        return;
+                    }
+                }
+            });
+        });
+
+        function addItem() {
+            const text = document.getElementById('itemInput').value.trim();
+            const price = parseFloat(document.getElementById('priceInput').value) || 0;
+
+            if (!text) return;
+
+            // Save to price history
+            priceHistory[text] = price;
+            localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
+
             items.push({
                 id: Date.now(),
                 text: text,
-                checked: false,
-                timestamp: new Date().toISOString()
+                price: price,
+                checked: false
             });
-            
-            saveItems();
-            renderList();
+
+            document.getElementById('itemInput').value = '';
+            document.getElementById('priceInput').value = '';
+            document.getElementById('priceInput').style.borderColor = '#e5e7eb';
+            document.getElementById('priceInput').style.background = '#f9fafb';
+            document.getElementById('itemInput').focus();
+
+            render();
         }
 
-        // Toggle check
-        function toggleCheck(id) {
+        function quickAdd(text, price) {
+            items.push({
+                id: Date.now(),
+                text: text,
+                price: price,
+                checked: false
+            });
+            render();
+        }
+
+        function toggleItem(id) {
             const item = items.find(i => i.id === id);
             if (item) {
                 item.checked = !item.checked;
-                saveItems();
-                renderList();
+                render();
             }
         }
 
-        // Delete item
+        function editItem(id) {
+            const item = items.find(i => i.id === id);
+            if (item) {
+                item.editing = true;
+                render();
+                // Focus on the input
+                setTimeout(() => {
+                    const input = document.getElementById(`price-input-${id}`);
+                    if (input) {
+                        input.focus();
+                        input.select();
+                    }
+                }, 50);
+            }
+        }
+
+        function saveEdit(id) {
+            const item = items.find(i => i.id === id);
+            if (item) {
+                const input = document.getElementById(`price-input-${id}`);
+                const newPrice = parseFloat(input.value) || 0;
+                item.price = newPrice;
+                item.editing = false;
+                
+                // Update price history
+                priceHistory[item.text] = newPrice;
+                localStorage.setItem('priceHistory', JSON.stringify(priceHistory));
+                
+                render();
+            }
+        }
+
+        function cancelEdit(id) {
+            const item = items.find(i => i.id === id);
+            if (item) {
+                item.editing = false;
+                render();
+            }
+        }
+
         function deleteItem(id) {
             items = items.filter(i => i.id !== id);
-            saveItems();
-            renderList();
+            render();
         }
 
-        // Clear checked items
-        function clearChecked() {
-            const checkedCount = items.filter(i => i.checked).length;
-            
-            if (checkedCount === 0) {
-                alert('Ni označenih artiklov za brisanje.');
-                return;
-            }
-            
-            if (confirm(`Izbriši ${checkedCount} kupljenih artiklov?`)) {
+        function clearBought() {
+            if (confirm('Izbriši vse kupljene artikle?')) {
                 items = items.filter(i => !i.checked);
-                saveItems();
-                renderList();
+                render();
             }
         }
 
-        // Save to localStorage
-        function saveItems() {
-            localStorage.setItem('shoppingList', JSON.stringify(items));
-        }
-
-        // Share list
         function shareList() {
             const uncheckedItems = items.filter(i => !i.checked);
+            const checkedItems = items.filter(i => i.checked);
             
-            if (uncheckedItems.length === 0) {
-                alert('Ni artiklov za deljenje!');
-                return;
-            }
+            let text = '🛒 Nakupovalni Listek\n\n';
             
-            const text = '🛒 Nakupovalni Listek:\n\n' + 
-                uncheckedItems.map(item => `• ${item.text}`).join('\n');
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Nakupovalni Listek',
-                    text: text
-                }).catch(err => console.log('Error sharing:', err));
-            } else {
-                // Fallback - copy to clipboard
-                navigator.clipboard.writeText(text).then(() => {
-                    alert('✅ Seznam skopiran v clipboard!\nLahko ga prilepiš v Messages.');
-                }).catch(() => {
-                    alert(text);
+            if (uncheckedItems.length > 0) {
+                text += '📝 ZA KUPIT:\n';
+                uncheckedItems.forEach(item => {
+                    text += `• ${item.text}`;
+                    if (item.price > 0) text += ` - ${item.price.toFixed(2)}€`;
+                    text += '\n';
                 });
             }
+            
+            if (checkedItems.length > 0) {
+                text += '\n✅ KUPLJENO:\n';
+                checkedItems.forEach(item => {
+                    text += `• ${item.text}`;
+                    if (item.price > 0) text += ` - ${item.price.toFixed(2)}€`;
+                    text += '\n';
+                });
+            }
+
+            const total = items.reduce((sum, item) => sum + item.price, 0);
+            text += `\n💰 SKUPAJ: ${total.toFixed(2)}€`;
+
+            alert('📋 Seznam skopiran!\n\n' + text);
         }
 
-        // Render list
-        function renderList() {
-            const container = document.getElementById('shoppingList');
+        function render() {
+            const container = document.getElementById('itemsList');
             
-            // Sort: unchecked first, then checked
-            const sortedItems = [...items].sort((a, b) => {
-                if (a.checked === b.checked) return 0;
-                return a.checked ? 1 : -1;
-            });
-            
-            if (sortedItems.length === 0) {
+            if (items.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <svg fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
-                        </svg>
+                        <div class="empty-icon">🛒</div>
                         <div>Tvoj seznam je prazen</div>
-                        <div style="font-size: 14px; margin-top: 8px;">Dodaj prvi artikel!</div>
+                        <div style="font-size: 13px; margin-top: 5px;">Dodaj prvi artikel!</div>
                     </div>
                 `;
             } else {
-                container.innerHTML = sortedItems.map(item => `
-                    <div class="shopping-item ${item.checked ? 'checked' : ''}">
+                const unchecked = items.filter(i => !i.checked);
+                const checked = items.filter(i => i.checked);
+                const sorted = [...unchecked, ...checked];
+
+                container.innerHTML = sorted.map(item => `
+                    <div class="item ${item.checked ? 'checked' : ''} ${item.editing ? 'editing' : ''}">
                         <input 
                             type="checkbox" 
                             class="checkbox" 
                             ${item.checked ? 'checked' : ''} 
-                            onchange="toggleCheck(${item.id})"
+                            onchange="toggleItem(${item.id})"
+                            ${item.editing ? 'disabled' : ''}
                         >
-                        <div class="item-text ${item.checked ? 'checked' : ''}">
-                            ${item.text}
+                        <div class="item-content">
+                            <span class="item-text">${escapeHtml(item.text)}</span>
+                            ${item.editing ? `
+                                <input 
+                                    type="number" 
+                                    step="0.01" 
+                                    class="price-edit-input" 
+                                    id="price-input-${item.id}"
+                                    value="${item.price.toFixed(2)}"
+                                    onkeypress="if(event.key==='Enter') saveEdit(${item.id})"
+                                >
+                            ` : `
+                                <span class="item-price" onclick="editItem(${item.id})" title="Klikni za urejanje">
+                                    ${item.price > 0 ? item.price.toFixed(2) + '€' : ''}
+                                </span>
+                            `}
                         </div>
-                        <button class="delete-btn" onclick="deleteItem(${item.id})">
-                            🗑️
-                        </button>
+                        ${item.editing ? `
+                            <button class="save-btn" onclick="saveEdit(${item.id})">✓ Shrani</button>
+                            <button class="delete-btn" onclick="cancelEdit(${item.id})">✕</button>
+                        ` : `
+                            <button class="edit-btn" onclick="editItem(${item.id})">✏️</button>
+                            <button class="delete-btn" onclick="deleteItem(${item.id})">🗑️</button>
+                        `}
                     </div>
                 `).join('');
             }
+
+            // Update stats
+            const total = items.reduce((sum, item) => sum + item.price, 0);
+            const toBuy = items.filter(i => !i.checked).length;
+            const bought = items.filter(i => i.checked).length;
+
+            document.getElementById('totalPrice').textContent = total.toFixed(2) + ' €';
+            document.getElementById('totalItems').textContent = items.length;
+            document.getElementById('toBuyItems').textContent = toBuy;
+            document.getElementById('boughtItems').textContent = bought;
             
-            updateStats();
+            // Update history badge
+            const historyCount = Object.keys(priceHistory).length;
+            document.getElementById('historyBadge').textContent = `💾 ${historyCount} v zgodovini`;
         }
 
-        // Update statistics
-        function updateStats() {
-            const total = items.length;
-            const checked = items.filter(i => i.checked).length;
-            const unchecked = total - checked;
-            
-            document.getElementById('totalCount').textContent = total;
-            document.getElementById('checkedCount').textContent = checked;
-            document.getElementById('uncheckedCount').textContent = unchecked;
-            document.getElementById('listCount').textContent = total;
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // Initialize
-        renderList();
+        renderQuickList();
+        render();
     </script>
-</body>
-</html>
+</body> 
+</html>     
