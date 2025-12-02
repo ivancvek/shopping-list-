@@ -520,7 +520,7 @@
     </div>
 
     <script>
-        let items = [];
+        let items = JSON.parse(localStorage.getItem('shoppingItemsV2') || '[]');
         let priceHistory = JSON.parse(localStorage.getItem('priceHistory') || '{}');
 
         // 50 predefined items with prices
@@ -747,11 +747,23 @@
             const total = items.reduce((sum, item) => sum + item.price, 0);
             text += `\n💰 SKUPAJ: ${total.toFixed(2)}€`;
 
-            alert('📋 Seznam skopiran!\n\n' + text);
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Nakupovalni Listek',
+                    text: text
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('✅ Seznam skopiran! Lahko ga prilepiš v Messages.');
+                });
+            }
         }
 
         function render() {
             const container = document.getElementById('itemsList');
+            
+            // Save to localStorage
+            localStorage.setItem('shoppingItemsV2', JSON.stringify(items));
             
             if (items.length === 0) {
                 container.innerHTML = `
@@ -828,5 +840,5 @@
         renderQuickList();
         render();
     </script>
-</body> 
-</html>     
+</body>
+</html>
